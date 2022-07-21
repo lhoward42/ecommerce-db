@@ -1,6 +1,8 @@
 const {Sequelize} = require('sequelize');
+const { dbURL } = require("./config/index")
 
-const sequelize = new Sequelize("postgres://postgres:noSittingDucks2021@localhost:5432/valentine-tingz");
+console.log(dbURL);
+const sequelize = new Sequelize(dbURL);
 
 async function syncDb(sequelize, options){
     const { force, alter } = options;
