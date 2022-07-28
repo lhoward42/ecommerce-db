@@ -1,15 +1,13 @@
 const express = require("express");
 const app = new express();
-const cors = require("cors")
+const cors = require("cors");
+app.use(require('./middleware/headers'));
+app.use(cors());
 const { sequelize } = require('./db');
 const controllers = require('./controllers');
 const { appPort, dbName } = require("./config/index");
+const { createShippingOption } = require('./stripe/shipping');
 
-app.use(
-    cors({
-        origin: "*",
-    })
-);
 
 app.use(
     express.json({
@@ -18,6 +16,8 @@ app.use(
 )
 
 app.use("/admin", controllers.adminController );
+
+app.post("/create-shipping-option", createShippingOption);
 
 sequelize.authenticate()
     .then(() => sequelize.sync())

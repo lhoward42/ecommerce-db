@@ -2,6 +2,7 @@ const { client_url, jwtSecret } = require("../config/index");
 const { UniqueConstraintError } = require("sequelize/lib/errors");
 const Express = require("express");
 const router = Express.Router();
+const jwt = require("jsonwebtoken")
 const { Admin, Token } = require("../models");
 const bcrypt = require("bcryptjs");
 const crypto = require("crypto");
@@ -10,12 +11,20 @@ router.post("/register", async (req, res) => {
   const { email, password } = req.body;
   const pwdHash = bcrypt.hashSync(password, 13);
   try {
-    if (email === "v@vtingz.com"){
+    if (
+      email === "v@vtingz.com" || 
+      email === "jess@nap.com"
+    ){
+      
   const createAdmin = await Admin.create({
     emailAddress: email,
     passwordHash: pwdHash,
   });
-  if (createAdmin.emailAddress === "v@vtingz.com"){
+  if (
+    createAdmin.emailAddress === "v@vtingz.com" || 
+    createAdmin.emailAddress === "jess@nap.com"
+  ){
+    
     res.status(201).json({
         message: "Admin successfully registered",
         user: createAdmin
@@ -58,9 +67,9 @@ router.post("/login", async (req, res) => {
           password,
           loginAdmin.passwordHash
         );
-        console.log(password, loginAdmin.passwordHash);
-          console.log("passwordComparison ----->",passwordComparison);
+        
         if (passwordComparison) {
+          console.log("----loginAdmin", loginAdmin, "--------");
           const token = jwt.sign({ id: loginAdmin.id }, jwtSecret, {
             expiresIn: 60 * 60 * 24,
           });
@@ -77,7 +86,7 @@ router.post("/login", async (req, res) => {
       }
     } catch (err) {
       res.status(500).json({
-        message: "Failed to register admin",
+        message: "Failed to login admin",
       });
     }
     res.json()
