@@ -1,7 +1,7 @@
 const { stripe } = require("../config/index");
 
 const createShippingOption = async (req, res) => {
-    const { display_name, amount, currency } = req.body;
+    const { display_name, amount, currency, quantity } = req.body;
 
     let shippingObject;
 
@@ -12,6 +12,7 @@ const createShippingOption = async (req, res) => {
             display_name,
             type: 'fixed_amount',
             fixed_amount: { amount, currency },
+            metadata: { quantity },
             // delivery_estimate: { minimum, maximum },
         })
         res.status(200).json({ shippingId: shippingObject.id });
@@ -22,10 +23,23 @@ const createShippingOption = async (req, res) => {
 }
 
 const getShippingOptions = async (req, res) => {
-
+    let message;
+   try {
+     let shippingRates = await stripe.shippingRates.list({});
+     message = {
+        message: "Shipping rates have been retrieved",
+        data: shippingRates
+     }
+     
+     
+   } catch (err) {
+    message = { message: "an error occurred, could not retrieve shipping options", err, stripe };
+   }
+   res.json(message);
 }
+
 
 module.exports = {
     createShippingOption, 
-
+    getShippingOptions
 }

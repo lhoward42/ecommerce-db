@@ -6,7 +6,7 @@ app.use(cors());
 const { sequelize } = require('./db');
 const controllers = require('./controllers');
 const { appPort, dbName } = require("./config/index");
-const { createShippingOption } = require('./stripe/shipping');
+const { createShippingOption, getShippingOptions, updateShippingOption } = require('./stripe/shipping');
 
 
 app.use(
@@ -16,8 +16,11 @@ app.use(
 )
 
 app.use("/admin", controllers.adminController );
+app.use("/product", controllers.productController );
 
 app.post("/create-shipping-option", createShippingOption);
+app.get("/get-shipping-options", getShippingOptions);
+
 
 sequelize.authenticate()
     .then(() => sequelize.sync())
