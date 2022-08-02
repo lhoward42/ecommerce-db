@@ -4,6 +4,10 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.STRING(100),
             allowNull: false,
         },
+        imageUrl: {
+          type: DataTypes.STRING,
+          defaultValue: "",
+        },
         description: {
             type: DataTypes.STRING,
             allowNull: false,
@@ -16,6 +20,22 @@ module.exports = (sequelize, DataTypes) => {
         price: {
             type: DataTypes.DECIMAL(6,2),
             allowNull: false,
+        },
+        property: {
+            type: DataTypes.STRING,
+            defaultValue: "",
+        },
+        value: {
+            type: DataTypes.ARRAY(DataTypes.STRING(300)),
+            defaultValue: [],
+        },
+        property2: {
+            type: DataTypes.STRING,
+            defaultValue: "",
+        },
+        value2: {
+            type: DataTypes.ARRAY(DataTypes.STRING(300)),
+            defaultValue: [],
         },
     })
     return Product;
