@@ -7,6 +7,10 @@ const config = {
     stripe: require("stripe")(`${process.env.SECRET_KEY}`),
     jwtSecret: process.env.JWT_KEY,
     client_url: process.env.CLIENT_URL,
+    webhook_secret: process.env.WEB_HOOK_SECRET,
+    sender: process.env.SENDER,
+    host: process.env.EMAIL_HOST,
+    pass: process.env.PASSWORD
 };
 
 module.exports = config;

@@ -6,6 +6,10 @@ const jwt = require("jsonwebtoken")
 const { Admin, Token } = require("../models");
 const bcrypt = require("bcryptjs");
 const crypto = require("crypto");
+const Sequelize = require('sequelize');
+const Op = Sequelize.Op;
+const { sendMail } = require("../utils/sendMail");
+const e = require("express");
 
 router.post("/register", async (req, res) => {
   const { email, password } = req.body;
@@ -13,7 +17,7 @@ router.post("/register", async (req, res) => {
   try {
     if (
       email === "v@vtingz.com" || 
-      email === "jess@nap.com"
+      email === "webdevlaurice@gmail.com"
     ){
       
   const createAdmin = await Admin.create({
@@ -22,7 +26,7 @@ router.post("/register", async (req, res) => {
   });
   if (
     createAdmin.emailAddress === "v@vtingz.com" || 
-    createAdmin.emailAddress === "jess@nap.com"
+    createAdmin.emailAddress === "webdevlaurice@gmail.com"
   ){
     
     res.status(201).json({
@@ -60,7 +64,7 @@ router.post("/login", async (req, res) => {
       console.log("loginAdmin ----->", loginAdmin);
       if (
          email === "v@vtingz.com" || 
-         email === "jess@nap.com"
+         email === "webdevlaurice@gmail.com"
         
       ) {
         const passwordComparison = await bcrypt.compare(
@@ -129,15 +133,86 @@ router.post("/login", async (req, res) => {
                 AdminId: admin.id
             })
             const link = `${client_url}/passwordReset/${resetToken}/${admin.id}`;
-            console.log(link);
+            sendMail(
+              admin.emailAddress,
+              "Password Reset Request",
+              {
+                name: admin.emailAddress,
+                link: link,
+              },
+              "./template/requestResetPassword.handlebars"
+            );
+            message = { message: "success", resetToken};
+            res.json(message);
+            return link;
+            
         }
-        
-        
+    
     } catch (err) {
-
+      return res.json({ status: "ok" })
     }
+  });
 
-    res.json({ status: "ok"})
+  //Reset Password
+  router.put('/password-reset', async (req, res) => {
+    await Token.destroy({
+      where: {
+        tokenExpires: { [Op.lt]: new Date() },
+      }
+    });
+    const { password, id, token } = req.body;
+    let message; 
+
+    //checks to see if a token exist for the admin requesting reset
+    const passwordResetToken = await Token.findOne({
+      where: {
+        AdminId: id,
+        tokenExpires: { [Op.gt]: new Date() },
+      }
+    })
+    if (!passwordResetToken) {
+      console.log("Invalid password or expired reset token");
+      return false
+    }
+    const query = {
+      where: {
+        id,
+      },
+      returning: true,
+    };
+
+    //compare token from link with encrypt token in the database
+    const isValid = await bcrypt.compare(token, passwordResetToken.token);
+
+    if(!isValid) return ("Invalid or expired password");
+    
+    try {
+    const hash = await bcrypt.hash(password, 13);
+    const data = {
+      passwordHash: hash,
+    }
+    //updates new password
+    const updatePassword = await Admin.update(data, query);
+    message = {
+      message: "Password updated",
+      data: updatePassword,
+    }
+    
+    //destroys the token
+    await Token.destroy({
+      where: {
+        AdminId: id,
+      },
+    });
+
+   } catch (err) {
+    message = {
+      message: "ok",
+      data: null,
+    }
+   }
+   res.json(message);
   })
+
 
 module.exports = router;

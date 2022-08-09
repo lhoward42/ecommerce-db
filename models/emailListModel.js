@@ -1,14 +1,15 @@
 module.exports = (sequelize, DataTypes) => {
-    const Admin = sequelize.define("Admin", {
+    const EmailList = sequelize.define("EmailList", {
         emailAddress: {
             type: DataTypes.STRING,
             allowNull: false,
             unique: true,
         },
-        passwordHash: {
+        name: {
             type: DataTypes.STRING,
             allowNull: false,
+            unique: true,
         }
     })
-    return Admin;
+    return EmailList;
 };
