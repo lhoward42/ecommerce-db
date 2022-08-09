@@ -22,6 +22,7 @@ app.use(
 
 app.use("/admin", controllers.adminController);
 app.use("/product", controllers.productController);
+app.use("/email-list", controllers.emailListController );
 
 app.post("/create-checkout-session", createCheckoutSession);
 app.post("/create-shipping-option", createShippingOption);
