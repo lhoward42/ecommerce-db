@@ -1,7 +1,7 @@
 const { stripe } = require("../config/index");
 
 const createShippingOption = async (req, res) => {
-    const { display_name, amount, currency, quantity } = req.body;
+    const { display_name, amount, currency, minItems, maxItems, distance } = req.body;
 
     let shippingObject;
 
@@ -12,7 +12,7 @@ const createShippingOption = async (req, res) => {
             display_name,
             type: 'fixed_amount',
             fixed_amount: { amount, currency },
-            metadata: { quantity },
+            metadata: { minItems, maxItems, distance },
             // delivery_estimate: { minimum, maximum },
         })
         res.status(200).json({ shippingId: shippingObject.id });

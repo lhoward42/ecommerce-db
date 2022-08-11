@@ -19,7 +19,7 @@ async function createCheckoutSession (req, res) {
             success_url: `${domainURL}/success?session_id={CHECKOUT_SESSION_ID}`,
             cancel_url: `${domainURL}/canceled`,
             shipping_address_collection: { allowed_countries: ['GB', 'US'] },
-            shipping_cost: { shipping_rate },
+            shipping_cost: [{ shipping_rate }],
            
           }); 
           res.status(200).json({ sessionId: session.id, });
