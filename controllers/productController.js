@@ -32,7 +32,6 @@ router.post("/create", validateToken, async (req, res) => {
                 property2,
                 value2
             });
-            console.log("newProduct ---->", newProduct);
             await u.addProduct(newProduct);
             
             message = { 
@@ -103,7 +102,7 @@ router.put("/:id", validateToken, async (req, res) => {
         const updateProduct = await Product.update(data, query);
         message = {
             message: "Product successfully updated",
-            data: updateProduct,
+            data: {updateProduct, query}, 
         }
     } catch (err) {
         message = {

@@ -5,8 +5,8 @@ module.exports = (sequelize, DataTypes) => {
             allowNull: false,
         },
         imageUrl: {
-          type: DataTypes.STRING,
-          defaultValue: "",
+          type: DataTypes.ARRAY(DataTypes.STRING),
+          defaultValue: [],
         },
         description: {
             type: DataTypes.STRING,
