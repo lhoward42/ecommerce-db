@@ -3,6 +3,7 @@ const { UniqueConstraintError } = require("sequelize/lib/errors");
 const router = require("express").Router();
 const { Product, Admin } = require("../models")
 
+
 router.post("/create", validateToken, async (req, res) => {
     let message; 
     console.log("right here ---->",validateToken);

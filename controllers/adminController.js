@@ -1,4 +1,4 @@
-const { client_url, jwtSecret } = require("../config/index");
+const { client_url, jwtSecret, admin_email, dev_email } = require("../config/index");
 const { UniqueConstraintError } = require("sequelize/lib/errors");
 const Express = require("express");
 const router = Express.Router();
@@ -16,8 +16,8 @@ router.post("/register", async (req, res) => {
   const pwdHash = bcrypt.hashSync(password, 13);
   try {
     if (
-      email === "v@vtingz.com" || 
-      email === "webdevlaurice@gmail.com"
+      email === dev_email || 
+      email === admin_email
     ){
       
   const createAdmin = await Admin.create({
@@ -25,8 +25,8 @@ router.post("/register", async (req, res) => {
     passwordHash: pwdHash,
   });
   if (
-    createAdmin.emailAddress === "v@vtingz.com" || 
-    createAdmin.emailAddress === "webdevlaurice@gmail.com"
+    createAdmin.emailAddress === dev_email || 
+    createAdmin.emailAddress === admin_email
   ){
     
     res.status(201).json({
@@ -63,8 +63,8 @@ router.post("/login", async (req, res) => {
       });
       console.log("loginAdmin ----->", loginAdmin);
       if (
-         email === "v@vtingz.com" || 
-         email === "webdevlaurice@gmail.com"
+         email === dev_email || 
+         email === admin_email
         
       ) {
         const passwordComparison = await bcrypt.compare(

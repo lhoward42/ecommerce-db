@@ -10,7 +10,9 @@ const config = {
     webhook_secret: process.env.WEB_HOOK_SECRET,
     sender: process.env.SENDER,
     host: process.env.EMAIL_HOST,
-    pass: process.env.PASSWORD
+    pass: process.env.PASSWORD,
+    admin_email: process.env.ALLOWED_EMAIL,
+    dev_email: process.env.OTHER_ALLOWED_EMAIL,
 };
 
 module.exports = config;
