@@ -37,6 +37,18 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.ARRAY(DataTypes.STRING(300)),
             defaultValue: [],
         },
+        subCategory: {
+            type: DataTypes.STRING,
+            defaultValue: "",
+        },
+        sale: {
+            type: DataTypes.BOOLEAN,
+            defaultValue: false,
+        },
+        discount: {
+            type: DataTypes.INTEGER,
+            defaultValue: 0,
+        }
     })
     return Product;
 }

@@ -16,7 +16,10 @@ router.post("/create", validateToken, async (req, res) => {
         property, 
         value, 
         property2, 
-        value2 
+        value2, 
+        subCategory,
+        sale,
+        discount 
     } = req.body;
     try {
         let u = await Admin.findOne({ where: { id: req.user.id }});
@@ -31,7 +34,10 @@ router.post("/create", validateToken, async (req, res) => {
                 property,
                 value,
                 property2,
-                value2
+                value2, 
+                subCategory,
+                sale,
+                discount,
             });
             await u.addProduct(newProduct);
             
@@ -79,7 +85,10 @@ router.put("/:id", validateToken, async (req, res) => {
         property,
         value,
         property2,
-        value2
+        value2, 
+        subCategory,
+        sale,
+        discount
     } = req.body;
     
     const query = {
@@ -97,7 +106,10 @@ router.put("/:id", validateToken, async (req, res) => {
         property,
         value,
         property2,
-        value2
+        value2,
+        subCategory,
+        sale,
+        discount,
     };
     try {
         const updateProduct = await Product.update(data, query);
