@@ -1,21 +1,28 @@
-const {Sequelize} = require('sequelize');
-const { dbURL } = require("./config/index")
+const { Sequelize } = require("sequelize");
+const { dbURL } = require("./config/index");
 
 console.log(dbURL);
-const sequelize = new Sequelize(dbURL);
+const sequelize = new Sequelize(dbURL, {
+  dialectOptions: {
+    ssl: {
+      require: true,
+      rejectUnauthorized: false,
+    },
+  },
+});
 
-async function syncDb(sequelize, options){
-    const { force, alter } = options;
-    try{
-        if (force) await sequelize.sync({ force: true });
-        else if (alter) await sequelize.sync({ alter: true });
-        else await sequelize.sync();
-    } catch (err) {
-        console.log(err);
-    }
+async function syncDb(sequelize, options) {
+  const { force, alter } = options;
+  try {
+    if (force) await sequelize.sync({ force: true });
+    else if (alter) await sequelize.sync({ alter: true });
+    else await sequelize.sync();
+  } catch (err) {
+    console.log(err);
+  }
 }
 
 module.exports = {
-    sequelize,
-    syncDb
+  sequelize,
+  syncDb,
 };
