@@ -5,7 +5,7 @@ const config = {
   dbName: process.env.DB_NAME,
   dbURL:
     process.env.NODE_ENV === "production"
-      ? process.env.DATABASE_URL
+      ? `${process.env.DATABASE_URL}?sslmode=require`
       : `postgres://${process.env.DB_USER}:${process.env.DB_PWD}@${
           process.env.DB_HOST
         }:${parseInt(process.env.DB_PORT)}/${process.env.DB_NAME}`,
