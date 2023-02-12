@@ -5,7 +5,7 @@ app.use(require("./middleware/headers"));
 app.use(cors());
 const { sequelize } = require("./db");
 const controllers = require("./controllers");
-const { appPort, dbName } = require("./config/index");
+const { appPort, dbName, dbURL } = require("./config/index");
 const {
   createShippingOption,
   getShippingOptions,
@@ -41,8 +41,5 @@ sequelize
     });
   })
   .catch((err) => {
-    console.log(
-      `[Server]: Server crashed. Error = ${err}`,
-      "here's so I know changes are happening"
-    );
+    console.log(`[Server]: Server crashed. Error = ${err}`, { dbURL });
   });
