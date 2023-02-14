@@ -13,6 +13,7 @@ const {
 const createCheckoutSession = require("./stripe/checkout");
 const webhook = require("./stripe/webhooks");
 const validateToken = require("./middleware/validate-jwt");
+const enforce = require("express-sslify");
 
 //this is so we know that the webhook is coming from stripe and not a malicious request
 app.use(
@@ -20,6 +21,7 @@ app.use(
     verify: (req, res, buffer) => (req["rawBody"] = buffer),
   })
 );
+app.use(enforce.HTTPS({ trustProtoHeader: true }));
 
 app.use("/admin", controllers.adminController);
 app.use("/product", controllers.productController);
