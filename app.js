@@ -21,12 +21,12 @@ app.use(
     verify: (req, res, buffer) => (req["rawBody"] = buffer),
   })
 );
-app.use(function (request, response, next) {
-  if (process.env.NODE_ENV != "development" && !request.secure) {
-    return response.redirect("https://" + request.headers.host + request.url);
-  }
-  next();
-});
+// app.use(function (request, response, next) {
+//   if (process.env.NODE_ENV != "development" && !request.secure) {
+//     return response.redirect("https://" + request.headers.host + request.url);
+//   }
+//   next();
+// });
 
 app.use("/admin", controllers.adminController);
 app.use("/product", controllers.productController);
