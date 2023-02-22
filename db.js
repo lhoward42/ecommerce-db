@@ -7,7 +7,6 @@ const sequelize = new Sequelize(dbURL, {
   dialectOptions: {
     ssl: {
       require: true,
-      rejectUnauthorized: false,
     },
   },
 });
