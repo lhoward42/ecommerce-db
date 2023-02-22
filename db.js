@@ -2,7 +2,15 @@ const { Sequelize } = require("sequelize");
 const { dbURL } = require("./config/index");
 
 console.log(dbURL);
-const sequelize = new Sequelize(dbURL);
+const sequelize = new Sequelize(dbURL, {
+  dialect: "postgres",
+  dialectOptions: {
+    ssl: {
+      require: true,
+      rejectUnauthorized: false,
+    },
+  },
+});
 
 async function syncDb(sequelize, options) {
   const { force, alter } = options;
