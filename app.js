@@ -13,7 +13,6 @@ const {
 const createCheckoutSession = require("./stripe/checkout");
 const webhook = require("./stripe/webhooks");
 const validateToken = require("./middleware/validate-jwt");
-const enforce = require("express-sslify");
 
 //this is so we know that the webhook is coming from stripe and not a malicious request
 app.use(
@@ -41,12 +40,8 @@ sequelize
   .authenticate()
   .then(() => sequelize.sync())
   .then(() => {
-    app.listen(appPort, () => {
-      console.log(
-        `Server: App is listening on ${appPort} and connected to ${dbName}`
-      );
-    });
+    app.listen(appPort);
   })
   .catch((err) => {
-    console.log(`[Server]: Server crashed. Error = ${err}`, { dbURL });
+    throw `[Server]: Server crashed. Error = ${err} ${dbURL}`;
   });

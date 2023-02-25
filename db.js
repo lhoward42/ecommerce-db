@@ -1,13 +1,15 @@
 const { Sequelize } = require("sequelize");
 const { dbURL } = require("./config/index");
 
-console.log(dbURL);
 const sequelize = new Sequelize(dbURL, {
-  dialectOptions: {
-    ssl: {
-      rejectUnauthorized: false,
-    },
-  },
+  dialectOptions:
+    process.env.NODE_ENV === "production"
+      ? {
+          ssl: {
+            rejectUnauthorized: false,
+          },
+        }
+      : {},
 });
 
 async function syncDb(sequelize, options) {
@@ -17,7 +19,7 @@ async function syncDb(sequelize, options) {
     else if (alter) await sequelize.sync({ alter: true });
     else await sequelize.sync();
   } catch (err) {
-    console.log(err);
+    throw err;
   }
 }
 
