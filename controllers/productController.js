@@ -5,7 +5,6 @@ const { Product, Admin } = require("../models");
 
 router.post("/create", validateToken, async (req, res) => {
   let message;
-  console.log("right here ---->", validateToken);
   const {
     title,
     description,
@@ -22,7 +21,6 @@ router.post("/create", validateToken, async (req, res) => {
   } = req.body;
   try {
     let u = await Admin.findOne({ where: { id: req.user.id } });
-    console.log(u);
     if (!u) return;
     let newProduct = await u.createProduct({
       title,
@@ -64,7 +62,6 @@ router.get("/all-products", async (req, res) => {
   try {
     const products = await Product.findAll();
     //this is letting me know that Products is actually being called
-    console.log(products);
     res.send(products);
   } catch (err) {
     message = { message: "Products could not be founds", err };
@@ -135,7 +132,6 @@ router.delete("/:id", validateToken, async (req, res) => {
         id: productId,
       },
     });
-    console.log(response);
     message = { message: "Product has been deleted" };
   } catch (err) {
     message = { message: "Failed to Delete" };

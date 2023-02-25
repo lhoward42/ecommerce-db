@@ -14,7 +14,7 @@ const createCheckoutSession = require("./stripe/checkout");
 const webhook = require("./stripe/webhooks");
 const validateToken = require("./middleware/validate-jwt");
 
-//this is so we know that the webhook is coming from stripe and not a malicious request
+//this is so we know that the webhook is coming from stripe
 app.use(
   express.json({
     verify: (req, res, buffer) => (req["rawBody"] = buffer),

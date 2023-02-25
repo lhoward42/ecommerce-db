@@ -12,17 +12,7 @@ async function createShippingOption(req, res) {
     max_delivery_est,
     amount,
   } = req.body;
-  console.log("server", req.body);
-  console.log("display name", display_name);
-  // let shippingObject;
-  console.log((min_price * 100).toFixed(2));
-  //   const maxPrice = max_price.toFixed(2);
-  //   const minPrice = min_price.toFixed(2);
-
   try {
-    console.log("made it to try block");
-
-    // console.log("stripe",stripe.shippingRates)
     let shippingObject = {
       display_name: display_name,
       type: "fixed_amount",
@@ -44,11 +34,9 @@ async function createShippingOption(req, res) {
         },
       },
     };
-  let response = await stripe.shippingRates.create(shippingObject);
-  console.log(response);
-    res.status(200).json('a new shipping option has been created');
+    let response = await stripe.shippingRates.create(shippingObject);
+    res.status(200).json("a new shipping option has been created");
   } catch (err) {
-    console.log(err);
     res
       .status(400)
       .json({ err: "an error occurred, unable to create shipping option" });
