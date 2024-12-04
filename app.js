@@ -36,12 +36,26 @@ app.post("/create-shipping-option", validateToken, createShippingOption);
 app.get("/get-shipping-options", getShippingOptions);
 app.post("/webhook", webhook);
 
-sequelize
-  .authenticate()
-  .then(() => sequelize.sync())
-  .then(() => {
-    app.listen(appPort);
-  })
-  .catch((err) => {
-    throw `[Server]: Server crashed. Error = ${err} ${dbURL}`;
-  });
+const startServer = async () => {
+  try {
+    //Authenticate the connection
+    await sequelize.authenticate();
+    console.log('Database connection has been established successfully');
+
+    //Sync the database 
+    await sequelize.sync();
+    console.log('Database synchronized successfully');
+
+    console.log("3001", appPort)
+    //Start the server 
+    app.listen(3001, () => {
+      console.log(`Server is running on port ${appPort}`)
+    })
+  } catch (err) {
+    console.error(`[Server]; Server crashed. Error=${err} ${dbURL}`);
+    process.exit(1); //Exit the process with failure code
+  }
+}
+
+//start the application
+startServer();

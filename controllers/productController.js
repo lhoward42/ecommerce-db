@@ -1,7 +1,7 @@
 const validateToken = require("../middleware/validate-jwt");
 const { UniqueConstraintError } = require("sequelize/lib/errors");
 const router = require("express").Router();
-const { Product, Admin } = require("../models");
+const { Product, Admin, Image } = require("../models");
 
 router.post("/create", validateToken, async (req, res) => {
   let message;
@@ -10,7 +10,6 @@ router.post("/create", validateToken, async (req, res) => {
     description,
     category,
     price,
-    imageUrl,
     property,
     value,
     property2,
@@ -18,16 +17,19 @@ router.post("/create", validateToken, async (req, res) => {
     subCategory,
     sale,
     discount,
+    images
   } = req.body;
+  console.log("images",req.body.images)
+
   try {
     let u = await Admin.findOne({ where: { id: req.user.id } });
+    console.log(u)
     if (!u) return;
     let newProduct = await u.createProduct({
       title,
       description,
       category,
       price,
-      imageUrl,
       property,
       value,
       property2,
@@ -37,6 +39,19 @@ router.post("/create", validateToken, async (req, res) => {
       discount,
     });
     await u.addProduct(newProduct);
+    console.log(newProduct);
+
+    let product = await Product.findOne({ where: { title: title }});
+
+    console.log("here's the product", product)
+
+    if (!product) return;
+
+    if (images && images.length > 0){
+      const newImages = await Image.bulkCreate(images);
+      await product.addImage(newImages);
+    }
+
 
     message = {
       message: "Product successfully created",
@@ -49,11 +64,13 @@ router.post("/create", validateToken, async (req, res) => {
       };
     } else {
       message = {
-        message: "Product creation failed",
+        message: `Product creation failed ${err}`,
       };
     }
   }
-  res.json(message);
+
+  console.log("message", message)
+  return res.json(message);
 });
 
 router.get("/all-products", async (req, res) => {
@@ -61,6 +78,7 @@ router.get("/all-products", async (req, res) => {
 
   try {
     const products = await Product.findAll();
+    
     //this is letting me know that Products is actually being called
     res.send(products);
   } catch (err) {
@@ -77,7 +95,6 @@ router.put("/:id", validateToken, async (req, res) => {
     description,
     category,
     price,
-    imageUrl,
     property,
     value,
     property2,
@@ -98,7 +115,6 @@ router.put("/:id", validateToken, async (req, res) => {
     description,
     category,
     price,
-    imageUrl,
     property,
     value,
     property2,

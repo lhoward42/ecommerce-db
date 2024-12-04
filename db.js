@@ -6,6 +6,7 @@ const sequelize = new Sequelize(dbURL, {
     process.env.NODE_ENV === "production"
       ? {
           ssl: {
+            require: true,
             rejectUnauthorized: false,
           },
         }

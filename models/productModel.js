@@ -3,10 +3,7 @@ module.exports = (sequelize, DataTypes) => {
         title: {
             type: DataTypes.STRING(100),
             allowNull: false,
-        },
-        imageUrl: {
-          type: DataTypes.ARRAY(DataTypes.STRING),
-          defaultValue: [],
+            unique: true
         },
         description: {
             type: DataTypes.STRING,

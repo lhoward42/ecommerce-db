@@ -6,9 +6,16 @@ const config = {
   dbURL:
     process.env.NODE_ENV === "production"
       ? `${process.env.DATABASE_URL}`
-      : `postgres://${process.env.DB_USER}:${process.env.DB_PWD}@${
-          process.env.DB_HOST
-        }:${parseInt(process.env.DB_PORT)}/${process.env.DB_NAME}`,
+      : `postgresql://${process.env.DB_USER}:${process.env.DB_PWD}@${
+          process.env.DB_HOST}/${process.env.DB_PORT}?sslmode=require`,
+        
+      // : `postgresql://ecommerce_server_owner:m0RUg5fCXZxs@ep-tiny-snowflake-a5cmiw07.us-east-2.aws.neon.tech/ecommerce_server?sslmode=require`,
+  // dbURL:
+  //   process.env.NODE_ENV === "production"
+  //     ? `${process.env.DATABASE_URL}`
+  //     : `postgres://${process.env.DB_USER}:${process.env.DB_PWD}@${
+  //         process.env.DB_HOST
+  //       }:${parseInt(process.env.DB_PORT)}/${process.env.DB_NAME}`,
   stripe: require("stripe")(`${process.env.SECRET_KEY}`),
   jwtSecret: process.env.JWT_KEY,
   client_url: process.env.CLIENT_URL,
